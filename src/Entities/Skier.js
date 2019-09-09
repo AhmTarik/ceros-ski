@@ -69,7 +69,10 @@ export class Skier extends Entity {
             this.moveSkierLeft();
         }
         else {
-            this.setDirection(this.direction - 1);
+            // allow skier gets up after crashed when turn left
+            this.setDirection(
+                (this.direction - 1 < 0) ? Constants.SKIER_DIRECTIONS.LEFT : this.direction - 1
+                );
         }
     }
 

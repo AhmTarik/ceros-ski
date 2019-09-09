@@ -17,6 +17,17 @@
             "name": "Attach to Chrome",
             "port": 8080,
             "webRoot": "${workspaceFolder}/src"
-        }
+        },
+        {
+            "name": "vscode-jest-tests",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/jest",
+            "args": ["test","${fileBasenameNoExtension}", "lib-name", "--runInBand=true", "--codeCoverage=false"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "trace": "all"
+      }
     ]
 }
