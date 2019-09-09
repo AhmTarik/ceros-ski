@@ -95,6 +95,11 @@ export class Skier extends Entity {
         this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
     }
 
+    jump(){
+        //TODO make skier jump
+        console.log(`skier is jumping`);
+    }
+
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
         //console.log(`asset manager is : ${JSON.stringify(assetManager)}`);
         //debugger;

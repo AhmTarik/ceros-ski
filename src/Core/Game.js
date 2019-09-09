@@ -61,7 +61,7 @@ export class Game {
     }
 
     handleKeyDown(event) {
-        switch(event.which) {
+        switch (event.which) {
             case Constants.KEYS.LEFT:
                 this.skier.turnLeft();
                 event.preventDefault();
@@ -76,6 +76,10 @@ export class Game {
                 break;
             case Constants.KEYS.DOWN:
                 this.skier.turnDown();
+                event.preventDefault();
+                break;
+            case Constants.KEYS.JUMP:
+                this.skier.jump();
                 event.preventDefault();
                 break;
         }
