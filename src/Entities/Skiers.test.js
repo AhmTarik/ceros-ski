@@ -14,7 +14,7 @@ describe(`Skier direction valid if`, () => {
         expect(_skier.direction).toBe(Constants.SKIER_DIRECTIONS.DOWN);
     });
 
-    it(`allow skier gets up after crashed when turn left`, () => {
+    it(`allow skier gets up after crashed when turn left <--`, () => {
         // crashing the skier
         _skier.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
         // make sure skier is crashed
@@ -25,15 +25,16 @@ describe(`Skier direction valid if`, () => {
         expect(_skier.direction).toBe(Constants.SKIER_DIRECTIONS.LEFT);
     });
 
-    // test(`Skiers movment's valid if`, () => {
-    
-    // });
-    // test(`Skiers movment's valid if`, () => {
-    
-    // });
-    // test(`Skiers movment's valid if`, () => {
-    
-    // });
+    it(`allow skier gets up after crashed when turn right -->`, () => {
+        // crashing the skier
+        _skier.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+        // make sure skier is crashed
+        expect(_skier.direction).toBe(Constants.SKIER_DIRECTIONS.CRASH);
+        // turn skier to right
+        _skier.turnRight();
+        // expected skier gets up after crashed
+        expect(_skier.direction).not.toBe(Constants.SKIER_DIRECTIONS.CRASH);
+    });
 
 
     function initializeSkier(){
