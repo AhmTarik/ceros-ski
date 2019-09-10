@@ -23,13 +23,16 @@ export class Skier extends Entity {
     }
 
     updateAsset() {
-        this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction];
+        this.assetName = (this.isJumping) ?
+        Constants.SKIER_DIRECTION_ASSET[Constants.SKIER_DIRECTIONS.JUMP]
+        : Constants.SKIER_DIRECTION_ASSET[this.direction];
     }
 
     setJumping(value) {
         if (this.isJumping !== value) {
             this.isJumping = value;
             this.updateTimeOut();
+            this.updateAsset();
         }
     }
 
@@ -121,7 +124,7 @@ export class Skier extends Entity {
             this.direction === Constants.SKIER_DIRECTIONS.LEFT_DOWN ||
             this.direction === Constants.SKIER_DIRECTIONS.RIGHT_DOWN
         )
-        this.setJumping(true);
+            this.setJumping(true);
 
     }
 
