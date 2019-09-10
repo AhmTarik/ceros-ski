@@ -6,19 +6,44 @@ export const SKIER_LEFT = 'skierLeft';
 export const SKIER_LEFTDOWN = 'skierLeftDown';
 export const SKIER_DOWN = 'skierDown';
 export const SKIER_RIGHTDOWN = 'skierRightDown';
-
 export const SKIER_RIGHT = 'skierRight';
+export const SKIER_JUMP = 'skierJump';
+
 export const TREE = 'tree';
 export const TREE_CLUSTER = 'treeCluster';
 export const ROCK1 = 'rock1';
 export const ROCK2 = 'rock2';
 export const JUMP_RAMP = 'jumpramp';
-export const SKIER_JUMP = 'skierJump';
+
+
 export const SKIER_STARTING_SPEED = 10;
 export const SKIER_DIAGONAL_SPEED_REDUCER = 1.4142;
 
 
 export const JUMPING_TIME = 1500;
+
+export const OBSTACLE_COLLISION_ASSET = {
+  [TREE] : {
+     stepover :false,
+     allowToJump :  false
+    },
+  [TREE_CLUSTER] : {
+    stepover :false,
+    allowToJump :  false
+   },
+  [ROCK1] : {
+    stepover :true,
+    allowToJump :  false
+   },
+  [ROCK2] : {
+    stepover :true,
+    allowToJump :  false
+   },
+  [JUMP_RAMP] : {
+    stepover :true,
+    allowToJump :  true
+   },
+}
 
 export const ASSETS = {
     [SKIER_CRASH]: 'img/skier_crash.png',

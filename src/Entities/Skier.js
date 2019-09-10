@@ -24,8 +24,8 @@ export class Skier extends Entity {
 
     updateAsset() {
         this.assetName = (this.isJumping) ?
-        Constants.SKIER_DIRECTION_ASSET[Constants.SKIER_DIRECTIONS.JUMP]
-        : Constants.SKIER_DIRECTION_ASSET[this.direction];
+            Constants.SKIER_DIRECTION_ASSET[Constants.SKIER_DIRECTIONS.JUMP]
+            : Constants.SKIER_DIRECTION_ASSET[this.direction];
     }
 
     setJumping(value) {
@@ -45,6 +45,11 @@ export class Skier extends Entity {
                 this.jumpingTimeout = null;
             }
         }
+    }
+
+    resetJumping(){
+        this.setJumping(false);
+        this.setJumping(true);
     }
 
     move() {
@@ -125,14 +130,32 @@ export class Skier extends Entity {
             this.direction === Constants.SKIER_DIRECTIONS.RIGHT_DOWN
         )
             this.setJumping(true);
+    }
 
+    getObstacleCollisionAsset(obstacleName) {
+        return Constants.OBSTACLE_COLLISION_ASSET[obstacleName] != null
+            ? Constants.OBSTACLE_COLLISION_ASSET[obstacleName] : null;
+    }
+
+    checkIfSkierAllowedToStepover(name) {
+        let _obstacleAsset = this.getObstacleCollisionAsset(name);
+        // based on obstacle type and jumping status
+        if (_obstacleAsset && _obstacleAsset.stepover) { 
+            return _obstacleAsset.stepover && this.isJumping;
+        }
+        return false;
+    }
+
+    checkIfSkierAllowedToJump(name) {
+        let _obstacleAsset = this.getObstacleCollisionAsset(name);
+        if (_obstacleAsset && _obstacleAsset.allowToJump) {
+            return _obstacleAsset.allowToJump
+        }
+        return false;
     }
 
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
-        //console.log(`asset manager is : ${JSON.stringify(assetManager)}`);
-        //debugger;
         const asset = assetManager.getAsset(this.assetName);
-        //console.log(`asset  is : ${JSON.stringify(asset)}`);
         const skierBounds = new Rect(
             this.x - asset.width / 2,
             this.y - asset.height / 2,
@@ -149,12 +172,19 @@ export class Skier extends Entity {
                 obstaclePosition.x + obstacleAsset.width / 2,
                 obstaclePosition.y
             );
-
-            return intersectTwoRects(skierBounds, obstacleBounds);
+            return intersectTwoRects(skierBounds, obstacleBounds) ? obstacle.getAssetName() : false;
         });
 
         if (collision) {
-            this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+            if (this.checkIfSkierAllowedToStepover(collision.assetName)) {
+                
+                if (this.checkIfSkierAllowedToJump(collision.assetName))
+                    this.resetJumping(); // use the ramp asset to have the skier jump whenever he hits a ramp.
+                    // if not that case will use
+                    // this.setJumping(true)
+            }
+            else
+                this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
         }
     };
 } 
