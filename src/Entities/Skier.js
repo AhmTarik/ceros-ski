@@ -47,7 +47,7 @@ export class Skier extends Entity {
         }
     }
 
-    resetJumping(){
+    resetJumping() {
         this.setJumping(false);
         this.setJumping(true);
     }
@@ -140,8 +140,8 @@ export class Skier extends Entity {
     checkIfSkierAllowedToStepover(name) {
         let _obstacleAsset = this.getObstacleCollisionAsset(name);
         // based on obstacle type and jumping status
-        if (_obstacleAsset && _obstacleAsset.stepover) { 
-            return _obstacleAsset.stepover && this.isJumping;
+        if (_obstacleAsset && _obstacleAsset.stepover) {
+            return _obstacleAsset.stepover && (this.checkIfSkierAllowedToJump(name) || this.isJumping);
         }
         return false;
     }
@@ -176,12 +176,16 @@ export class Skier extends Entity {
         });
 
         if (collision) {
+            console.log(`collision.assetName ${collision.assetName}
+            , step Over res: ${this.checkIfSkierAllowedToStepover(collision.assetName)}
+            , alloe to Jump: ${this.checkIfSkierAllowedToJump(collision.assetName)}
+            , isJumping ${this.isJumping}`);
             if (this.checkIfSkierAllowedToStepover(collision.assetName)) {
-                
+                // use the ramp asset to have the skier jump whenever he hits a ramp.
+                // if not that case will use
+                // this.setJumping(true)
                 if (this.checkIfSkierAllowedToJump(collision.assetName))
-                    this.resetJumping(); // use the ramp asset to have the skier jump whenever he hits a ramp.
-                    // if not that case will use
-                    // this.setJumping(true)
+                    this.resetJumping(); 
             }
             else
                 this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
