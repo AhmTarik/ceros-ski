@@ -121,7 +121,6 @@ export class Skier extends Entity {
             this.direction === Constants.SKIER_DIRECTIONS.LEFT_DOWN ||
             this.direction === Constants.SKIER_DIRECTIONS.RIGHT_DOWN
         )
-            console.log(`skier is jumping`);
         this.setJumping(true);
 
     }
