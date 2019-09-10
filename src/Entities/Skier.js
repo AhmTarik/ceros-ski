@@ -27,7 +27,7 @@ export class Skier extends Entity {
     }
 
     setJumping(value) {
-        if(this.isJumping !== value){
+        if (this.isJumping !== value) {
             this.isJumping = value;
             this.updateTimeOut();
         }
@@ -35,9 +35,9 @@ export class Skier extends Entity {
 
     updateTimeOut() {
         if (this.isJumping) {
-            this.jumpingTimeout = setTimeout(()=>{this.setJumping(false)}, Constants.JUMPING_TIME);
+            this.jumpingTimeout = setTimeout(() => { this.setJumping(false) }, Constants.JUMPING_TIME);
         } else {
-            if (this.jumpingTimeout){
+            if (this.jumpingTimeout) {
                 clearTimeout(this.jumpingTimeout);
                 this.jumpingTimeout = null;
             }
@@ -116,10 +116,13 @@ export class Skier extends Entity {
     }
 
     jump() {
-        //TODO make skier jump
-        console.log(`skier is jumping`);
-        if(this.direction !== Constants.SKIER_DIRECTIONS.CRASH)
-            this.setJumping(true);
+        //make skier jump
+        if (this.direction === Constants.SKIER_DIRECTIONS.DOWN ||
+            this.direction === Constants.SKIER_DIRECTIONS.LEFT_DOWN ||
+            this.direction === Constants.SKIER_DIRECTIONS.RIGHT_DOWN
+        )
+            console.log(`skier is jumping`);
+        this.setJumping(true);
 
     }
 
