@@ -7,6 +7,8 @@ export class Skier extends Entity {
 
     direction = Constants.SKIER_DIRECTIONS.DOWN;
     speed = Constants.SKIER_STARTING_SPEED;
+    isJumping = false;
+    jumpingTimeout = {};
 
     constructor(x, y) {
         super(x, y);
@@ -22,6 +24,24 @@ export class Skier extends Entity {
 
     updateAsset() {
         this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction];
+    }
+
+    setJumping(value) {
+        if(this.isJumping !== value){
+            this.isJumping = value;
+            this.updateTimeOut();
+        }
+    }
+
+    updateTimeOut() {
+        if (this.isJumping) {
+            this.jumpingTimeout = setTimeout(()=>{this.setJumping(false)}, Constants.JUMPING_TIME);
+        } else {
+            if (this.jumpingTimeout){
+                clearTimeout(this.jumpingTimeout);
+                this.jumpingTimeout = null;
+            }
+        }
     }
 
     move() {
@@ -72,7 +92,7 @@ export class Skier extends Entity {
             // allow skier gets up after crashed when turn left
             this.setDirection(
                 (this.direction - 1 < 0) ? Constants.SKIER_DIRECTIONS.LEFT : this.direction - 1
-                );
+            );
         }
     }
 
@@ -95,9 +115,12 @@ export class Skier extends Entity {
         this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
     }
 
-    jump(){
+    jump() {
         //TODO make skier jump
         console.log(`skier is jumping`);
+        if(this.direction !== Constants.SKIER_DIRECTIONS.CRASH)
+            this.setJumping(true);
+
     }
 
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
