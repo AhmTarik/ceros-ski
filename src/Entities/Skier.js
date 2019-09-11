@@ -4,7 +4,6 @@ import { intersectTwoRects, Rect } from "../Core/Utils";
 
 export class Skier extends Entity {
     assetName = Constants.SKIER_DOWN;
-
     direction = Constants.SKIER_DIRECTIONS.DOWN;
     speed = Constants.SKIER_STARTING_SPEED;
     isJumping = false;
@@ -16,10 +15,18 @@ export class Skier extends Entity {
 
     setDirection(direction) {
         // check incoming direction value exist in SKIER_DIRECTION_ASSET object before set it to direction.
-        if (Constants.SKIER_DIRECTION_ASSET[direction] != null) {
+        if (Constants.SKIER_DIRECTION_ASSET[direction] != null && this.direction !== direction) {
             this.direction = direction;
             this.updateAsset();
+            this.notifyDirection();
         }
+    }
+
+    notifyDirection() {
+        let element = document;
+        let event = document.createEvent("CustomEvent");
+        event.initCustomEvent("skierDirectionChanged", true, true, { direction: this.direction });
+        element.dispatchEvent(event);
     }
 
     updateAsset() {
@@ -53,6 +60,8 @@ export class Skier extends Entity {
     }
 
     move() {
+        if (!this.canMove())
+            return;
         switch (this.direction) {
             case Constants.SKIER_DIRECTIONS.LEFT_DOWN:
                 this.moveSkierLeftDown();
@@ -154,6 +163,14 @@ export class Skier extends Entity {
         return false;
     }
 
+    checkIfSkierCatched(name) {
+        let _obstacleAsset = this.getObstacleCollisionAsset(name);
+        if (_obstacleAsset && _obstacleAsset.catch) {
+            return _obstacleAsset.catch
+        }
+        return false;
+    }
+
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
         const asset = assetManager.getAsset(this.assetName);
         const skierBounds = new Rect(
@@ -176,19 +193,23 @@ export class Skier extends Entity {
         });
 
         if (collision) {
-            console.log(`collision.assetName ${collision.assetName}
-            , step Over res: ${this.checkIfSkierAllowedToStepover(collision.assetName)}
-            , alloe to Jump: ${this.checkIfSkierAllowedToJump(collision.assetName)}
-            , isJumping ${this.isJumping}`);
+            // console.log(`collision.assetName ${collision.assetName}
+            // , step Over res: ${this.checkIfSkierAllowedToStepover(collision.assetName)}
+            // , alloe to Jump: ${this.checkIfSkierAllowedToJump(collision.assetName)}
+            // , isJumping ${this.isJumping}`);
             if (this.checkIfSkierAllowedToStepover(collision.assetName)) {
                 // use the ramp asset to have the skier jump whenever he hits a ramp.
+                if (this.checkIfSkierAllowedToJump(collision.assetName))
+                    this.resetJumping();
                 // if not that case will use
                 // this.setJumping(true)
-                if (this.checkIfSkierAllowedToJump(collision.assetName))
-                    this.resetJumping(); 
             }
-            else
-                this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+            else {
+                if (this.checkIfSkierCatched(collision.name))
+                    this.setDirection(Constants.SKIER_DIRECTIONS.CATCH);
+                else
+                    this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+            }
         }
     };
 } 
