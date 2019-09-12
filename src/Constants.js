@@ -18,6 +18,13 @@ export const JUMP_RAMP = 'jumpramp';
 export const RHINO_LEFT = 'rhinoLeft';
 export const RHINO_LEFT2 = 'rhinoLeft2';
 
+export const RHINO_LIFT = 'rhinoLift';
+export const RHINO_LIFT_2 = 'rhinoLift2';
+export const RHINO_EAT_1 = 'rhinoEat1';
+export const RHINO_EAT_2 = 'rhinoEat2';
+export const RHINO_EAT_3 = 'rhinoEat3';
+export const RHINO_EAT_4 = 'rhinoEat4';
+
 
 export const SKIER_STARTING_SPEED = 10;
 export const SKIER_DIAGONAL_SPEED_REDUCER = 1.4142;
@@ -29,6 +36,7 @@ export const RHINO_DIAGONAL_SPEED_REDUCER = 1.7354;
 
 
 export const JUMPING_TIME = 1500;
+export const RHINO_EAT_SLIDER_TIME_INTERVAL = 250;
 
 export const OBSTACLE_COLLISION_ASSET = {
   [TREE]: {
@@ -50,17 +58,7 @@ export const OBSTACLE_COLLISION_ASSET = {
   [JUMP_RAMP]: {
     stepover: true,
     allowToJump: true
-  },
-  [RHINO_LEFT]: {
-    stepover: false,
-    allowToJump: false,
-    catch: true
-  },
-  [RHINO_LEFT2]: {
-    stepover: false,
-    allowToJump: false,
-    catch: true
-  },
+  }
 }
 
 export const ASSETS = {
@@ -77,7 +75,15 @@ export const ASSETS = {
   [JUMP_RAMP]: 'img/jump_ramp.png',
   [SKIER_JUMP]: 'img/skier_jump_3.png',
   [RHINO_LEFT]: 'img/rhino_run_left.png',
-  [RHINO_LEFT2]: 'img/rhino_run_left_2.png'
+  [RHINO_LEFT2]: 'img/rhino_run_left_2.png',
+
+  [RHINO_LIFT]: 'img/rhino_lift.png',
+  [RHINO_LIFT_2]: 'img/rhino_lift_mouth_open.png',
+  [RHINO_EAT_1]: 'img/rhino_lift_eat_1.png',
+  [RHINO_EAT_2]: 'img/rhino_lift_eat_2.png',
+  [RHINO_EAT_3]: 'img/rhino_lift_eat_3.png',
+  [RHINO_EAT_4]: 'img/rhino_lift_eat_4.png',
+
 
 };
 
@@ -89,7 +95,7 @@ export const SKIER_DIRECTIONS = {
   RIGHT_DOWN: 4,
   RIGHT: 5,
   JUMP: 6,
-  CATCH: 7
+  CAUGHT: 7000000
 };
 
 export const SKIER_DIRECTION_ASSET = {
@@ -99,16 +105,42 @@ export const SKIER_DIRECTION_ASSET = {
   [SKIER_DIRECTIONS.DOWN]: SKIER_DOWN,
   [SKIER_DIRECTIONS.RIGHT_DOWN]: SKIER_RIGHTDOWN,
   [SKIER_DIRECTIONS.RIGHT]: SKIER_RIGHT,
-  [SKIER_DIRECTIONS.JUMP]: SKIER_JUMP
+  [SKIER_DIRECTIONS.JUMP]: SKIER_JUMP,
+  [SKIER_DIRECTIONS.CAUGHT]: SKIER_CRASH,
 };
 
 export const SKI_EVENTS_ASSET = {
-  RHINO_CATCH_THE_SKIER: 'rhinoCatchTheSkier',
+  RHINO_CAUGHT_THE_SKIER: 'rhinoCaughtTheSkier',
   GAME_OVER: 'gameOver',
   GAME_STOPPED_RESUME: 'gemeStoppedResume',
   SKIER_JUMP_STATUS: 'skierJumpStatus',
-  RHINO_CAN_HUNT: 'rhinoCanHunt'
 }
+
+export const RHINO_DIRECTOIN = {
+  LIFT: 0,
+  LIFT_2: 1,
+  LIFT_EAT_1: 2,
+  LIFT_EAT_2: 3,
+  LIFT_EAT_3: 4,
+  LIFT_EAT_4: 5,
+  LEFT: 6,
+  LEFT_2: 7
+}
+
+export const RHINO_DIRECTION_ASSET = {
+  [RHINO_DIRECTOIN.LEFT]: RHINO_LEFT,
+  [RHINO_DIRECTOIN.LEFT_2]: RHINO_LEFT2,
+  [RHINO_DIRECTOIN.LIFT]: RHINO_LIFT,
+  [RHINO_DIRECTOIN.LIFT_2]: RHINO_LIFT_2,
+  [RHINO_DIRECTOIN.LIFT_EAT_1]: RHINO_EAT_1,
+  [RHINO_DIRECTOIN.LIFT_EAT_2]: RHINO_EAT_2,
+  [RHINO_DIRECTOIN.LIFT_EAT_3]: RHINO_EAT_3,
+  [RHINO_DIRECTOIN.LIFT_EAT_4]: RHINO_EAT_4,
+}
+
+
+
+
 
 export const KEYS = {
   LEFT: 37,
@@ -116,7 +148,6 @@ export const KEYS = {
   UP: 38,
   DOWN: 40,
   JUMP: 32, //space
-  PAUSE: 80,
-  PAUSE_CAPITA: 112,
+  PAUSE: 80, // p 
 
 };

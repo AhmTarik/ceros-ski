@@ -8,9 +8,11 @@ export class Skier extends Entity {
     speed = Constants.SKIER_STARTING_SPEED;
     isJumping = false;
     jumpingTimeout = {};
+    skierStopped = false;
 
     constructor(x, y) {
         super(x, y);
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.RHINO_CAUGHT_THE_SKIER, this.onSkierCaught.bind(this));
     }
 
     setDirection(direction) {
@@ -18,7 +20,6 @@ export class Skier extends Entity {
         if (Constants.SKIER_DIRECTION_ASSET[direction] != null && this.direction !== direction) {
             this.direction = direction;
             this.updateAsset();
-            this.notifyDirection();
         }
     }
 
@@ -127,7 +128,8 @@ export class Skier extends Entity {
     }
 
     turnDown() {
-        this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
+        if (this.direction !== Constants.SKIER_DIRECTIONS.CAUGHT)
+            this.setDirection(Constants.SKIER_DIRECTIONS.DOWN);
     }
 
     jump() {
@@ -169,6 +171,16 @@ export class Skier extends Entity {
         return false;
     }
 
+    onSkierCaught(e) {
+        if (!e || !e.detail) {
+            e.preventDefault();
+            return;
+        }
+        // this.skierStopped = e.detail.skierStopped;
+        this.setDirection(Constants.SKIER_DIRECTIONS.CAUGHT)
+        e.preventDefault();
+    }
+
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
         const asset = assetManager.getAsset(this.assetName);
         const skierBounds = new Rect(
@@ -202,12 +214,8 @@ export class Skier extends Entity {
                 // if not that case will use
                 // this.setJumping(true)
             }
-            else {
-                if (this.checkIfSkierCatched(collision.name))
-                    this.setDirection(Constants.SKIER_DIRECTIONS.CATCH);
-                else
-                    this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
-            }
+            else
+                this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
         }
     };
 } 

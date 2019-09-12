@@ -8,9 +8,11 @@ import { Rect } from './Utils';
 
 export class Game {
     gameWindow = null;
-    gamePaused = false;
-    gameOver = false;
+
+
     constructor() {
+        this.gamePaused = false;
+        this.rhinoCaughtTheSkier = false;
         this.assetManager = new AssetManager();
         this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         this.skier = new Skier(0, 0);
@@ -18,6 +20,9 @@ export class Game {
         this.obstacleManager = new ObstacleManager();
 
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_OVER, this.onGameOverChange.bind(this));
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.RHINO_CAUGHT_THE_SKIER, this.onRhinoCaughtTheSkier.bind(this));
+
     }
 
     init() {
@@ -29,7 +34,7 @@ export class Game {
     }
 
     run() {
-        if(!this.canPlay())
+        if (!this.canPlay())
             return requestAnimationFrame(this.run.bind(this));
         this.canvas.clearCanvas();
 
@@ -49,6 +54,7 @@ export class Game {
         this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
 
         this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+        this.rhino.checkIfRhinoCathTheSkier();
     }
 
     drawGameWindow() {
@@ -68,8 +74,14 @@ export class Game {
         this.gameWindow = new Rect(left, top, left + Constants.GAME_WIDTH, top + Constants.GAME_HEIGHT);
     }
 
-    pauseGame() {
+    restart() {
+        // simple way
+        window.location.reload(true);
+    }
 
+    pauseGame() {
+        if (!this.canPause())
+            return;
         this.gamePaused = !this.gamePaused;
         // notify game pused or resume
         let element = document;
@@ -78,15 +90,35 @@ export class Game {
         element.dispatchEvent(event);
     }
 
-    canPlay(number) {
-        number =  number|| -10;
+    canPlay(number = -10) {
         return (
-                ([Constants.KEYS.PAUSE, Constants.KEYS.PAUSE_CAPITA].includes(number))
-                ||
-                !this.gamePaused
-            )
-            &&
-            !this.gameOver;
+            (Constants.KEYS.PAUSE === number || !this.gamePaused)
+            ||
+            Constants.KEYS.RESTART === number
+        );
+    }
+
+    // can't stop the game when rhino caught the skier
+    canPause() {
+        return !this.rhinoCaughtTheSkier;
+    }
+
+    onGameOverChange(e) {
+        if (!e || !e.detail || !e.detail.gameOver == null) {
+            e.preventDefault();
+            return;
+        }
+        this.restart();
+        e.preventDefault();
+    }
+
+    onRhinoCaughtTheSkier(e) {
+        if (!e || !e.detail) {
+            e.preventDefault();
+            return;
+        }
+        this.rhinoCaughtTheSkier = true;
+        e.preventDefault();
     }
 
     handleKeyDown(event) {
@@ -117,10 +149,6 @@ export class Game {
                 event.preventDefault();
                 break;
             case Constants.KEYS.PAUSE:
-                this.pauseGame();
-                event.preventDefault();
-                break;
-            case Constants.KEYS.PAUSE_CAPITA:
                 this.pauseGame();
                 event.preventDefault();
                 break;
