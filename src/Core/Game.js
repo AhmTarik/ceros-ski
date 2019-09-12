@@ -29,6 +29,8 @@ export class Game {
     }
 
     run() {
+        if(!this.canPlay())
+            return requestAnimationFrame(this.run.bind(this));
         this.canvas.clearCanvas();
 
         this.updateGameWindow();
@@ -69,31 +71,27 @@ export class Game {
     pauseGame() {
 
         this.gamePaused = !this.gamePaused;
-        // notify
+        // notify game pused or resume
         let element = document;
         let event = document.createEvent("CustomEvent");
-        event.initCustomEvent('gemeStoppedResume', true, false, { gamePaused: this.gamePaused });
+        event.initCustomEvent(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, true, false, { gamePaused: this.gamePaused });
         element.dispatchEvent(event);
     }
 
-    canPlay() {
-        let res =
-            (
-                ([Constants.KEYS.PAUSE, Constants.KEYS.PAUSE_CAPITA].includes(event.which))
+    canPlay(number) {
+        number =  number|| -10;
+        return (
+                ([Constants.KEYS.PAUSE, Constants.KEYS.PAUSE_CAPITA].includes(number))
                 ||
                 !this.gamePaused
             )
             &&
             !this.gameOver;
-
-        return res;
     }
 
-
-
     handleKeyDown(event) {
-        // debugger;
-        if (!this.canPlay()) {
+
+        if (!this.canPlay(event.which)) {
             event.preventDefault();
             return
         }

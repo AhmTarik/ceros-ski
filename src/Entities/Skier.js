@@ -60,8 +60,6 @@ export class Skier extends Entity {
     }
 
     move() {
-        if (!this.canMove())
-            return;
         switch (this.direction) {
             case Constants.SKIER_DIRECTIONS.LEFT_DOWN:
                 this.moveSkierLeftDown();

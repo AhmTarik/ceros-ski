@@ -35,7 +35,7 @@ export class Rhino extends Entity {
 
     setPosition() {
         this.x = this.skierPosition.x + this.space;
-        this.y = this.skierPosition.y + this.space;
+        this.y = this.skierPosition.y - this.space;
     }
 
     setSkierPosition(skierPosition){
@@ -55,20 +55,12 @@ export class Rhino extends Entity {
     }
 
     move(skierPosition) {
-        if(!this.canMove())
-            return;
-        //TODO start save skier position
+        // start save skier position
         this.setSkierPosition(skierPosition);
-        //TODO start move rhino to skier
+        // start move rhino to skier position
         this.setPosition();
         if(this.canHunt ){
-            //debugger;
             this.setSpace();
-            // console.log(`rhino positio is x: ${this.x} y:${this.y}\n 
-            // \n space is ${this.space}
-            // \n speed is : ${this.speed}
-            // \n skier position is x: ${this.skierPosition.x} y:${this.skierPosition.y}
-            // `)
         }
     }
 
@@ -81,7 +73,15 @@ export class Rhino extends Entity {
     checkIfRhinoCathTheSkier(){
         if(this.space === 0){
             this.setCatchIt(true);
+            // notify game over
         }
+    }
+
+    notifyGameOver(){
+        let element = document;
+        let event = document.createEvent("CustomEvent");
+        event.initCustomEvent(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, true, false, { gamePaused: this.gamePaused });
+        element.dispatchEvent(event);
     }
 
 
