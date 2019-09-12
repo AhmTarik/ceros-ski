@@ -1,25 +1,34 @@
 import * as Constants from "../Constants";
 import { Entity } from "./Entity";
+import { SkiTimer } from "../Core/timer";
 
 export class Rhino extends Entity {
-    skierPosition;
-    canHunt = false;
-    catchIt = false;
-    startEat = false;
-    direction = Constants.RHINO_DIRECTOIN.LEFT;
-    space = Constants.SPACE_BETWEEN_SKIER_AND_RHINO;
-    speed = Constants.RHINO_STARTING_SPEED;
     
-
+    
     constructor(x, y) {
         super(x, y);
-        setTimeout(
-            () => {
+        this.skierPosition;
+        this.canHunt = false;
+        this.catchIt = false;
+        this.startEat = false;
+        this.direction = Constants.RHINO_DIRECTOIN.LEFT;
+        this.space = Constants.SPACE_BETWEEN_SKIER_AND_RHINO;
+        this.speed = Constants.RHINO_STARTING_SPEED;
+        this.skiTimer = new SkiTimer();
+        this.rhinoSkiTimer = this.skiTimer.createTimeout(
+            ()=>{
                 this.canHunt = true;
-                // console.log(`the skier position in timeout is ${JSON.stringify(this.skierPosition)}`);
-                //this.setPosition()
-            }
-            , 5000)
+            },5000
+        );
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, this.onGamePaused.bind(this));
+
+        // setTimeout(
+        //     () => {
+        //         this.canHunt = true;
+        //         // console.log(`the skier position in timeout is ${JSON.stringify(this.skierPosition)}`);
+        //         //this.setPosition()
+        //     }
+        //     , 5000)
     }
 
     setDirection(direction){
@@ -120,6 +129,19 @@ export class Rhino extends Entity {
         let event = document.createEvent("CustomEvent");
         event.initCustomEvent(Constants.SKI_EVENTS_ASSET.RHINO_CAUGHT_THE_SKIER, true, true, { rhinoCaugthSkier: true });
         element.dispatchEvent(event);
+    }
+
+    onGamePaused(e) {
+        if (!e || !e.detail || e.detail.gamePaused == null) {
+            e.preventDefault();
+            return;
+        }
+        console.log(`inside rhino onGampaused ,gamePaused is ${e.detail.gamePaused}`)
+        if(e.detail.gamePaused)
+            this.skiTimer.cancelTimeout(this.rhinoSkiTimer);
+        else
+            this.skiTimer.resumeTimeout(this.rhinoSkiTimer)
+        e.preventDefault();
     }
 
 }

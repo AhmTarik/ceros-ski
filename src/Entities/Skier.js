@@ -1,18 +1,22 @@
 import * as Constants from "../Constants";
 import { Entity } from "./Entity";
 import { intersectTwoRects, Rect } from "../Core/Utils";
+import { SkiTimer } from "../Core/timer";
+
 
 export class Skier extends Entity {
     assetName = Constants.SKIER_DOWN;
     direction = Constants.SKIER_DIRECTIONS.DOWN;
     speed = Constants.SKIER_STARTING_SPEED;
-    isJumping = false;
-    jumpingTimeout = {};
-    skierStopped = false;
-
+    
     constructor(x, y) {
         super(x, y);
+        this.isJumping = false;
+        this.jumpingTimeout = {};
+        this.skiTimer = new SkiTimer();
         document.addEventListener(Constants.SKI_EVENTS_ASSET.RHINO_CAUGHT_THE_SKIER, this.onSkierCaught.bind(this));
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, this.onGamePaused.bind(this));
+
     }
 
     setDirection(direction) {
@@ -39,11 +43,13 @@ export class Skier extends Entity {
 
     updateTimeOut() {
         if (this.isJumping) {
-            this.jumpingTimeout = setTimeout(() => { this.setJumping(false) }, Constants.JUMPING_TIME);
+            this.jumpingTimeout = this.skiTimer.createTimeout(() => { this.setJumping(false) },Constants.JUMPING_TIME);
+           // setTimeout(() => { this.setJumping(false) }, Constants.JUMPING_TIME);
         } else {
             if (this.jumpingTimeout) {
-                clearTimeout(this.jumpingTimeout);
-                this.jumpingTimeout = null;
+                this.skiTimer.cancelTimeout(this.jumpingTimeout)
+                // clearTimeout(this.jumpingTimeout);
+                // this.jumpingTimeout = null;
             }
         }
     }
@@ -169,7 +175,6 @@ export class Skier extends Entity {
             e.preventDefault();
             return;
         }
-        // this.skierStopped = e.detail.skierStopped;
         this.setDirection(Constants.SKIER_DIRECTIONS.CAUGHT)
         e.preventDefault();
     }
@@ -207,4 +212,17 @@ export class Skier extends Entity {
                 this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
         }
     };
+
+    onGamePaused(e) {
+        if (!e || !e.detail || e.detail.gamePaused == null) {
+            e.preventDefault();
+            return;
+        }
+        console.log(`inside rhino onGampaused ,gamePaused is ${e.detail.gamePaused}`)
+        if(e.detail.gamePaused)
+            this.skiTimer.cancelTimeout(this.jumpingTimeout);
+        else
+            this.skiTimer.resumeTimeout(this.jumpingTimeout)
+        e.preventDefault();
+    }
 } 
