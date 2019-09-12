@@ -23,13 +23,6 @@ export class Skier extends Entity {
         }
     }
 
-    notifyDirection() {
-        let element = document;
-        let event = document.createEvent("CustomEvent");
-        event.initCustomEvent("skierDirectionChanged", true, true, { direction: this.direction });
-        element.dispatchEvent(event);
-    }
-
     updateAsset() {
         this.assetName = (this.isJumping) ?
             Constants.SKIER_DIRECTION_ASSET[Constants.SKIER_DIRECTIONS.JUMP]
@@ -203,10 +196,6 @@ export class Skier extends Entity {
         });
 
         if (collision) {
-            // console.log(`collision.assetName ${collision.assetName}
-            // , step Over res: ${this.checkIfSkierAllowedToStepover(collision.assetName)}
-            // , alloe to Jump: ${this.checkIfSkierAllowedToJump(collision.assetName)}
-            // , isJumping ${this.isJumping}`);
             if (this.checkIfSkierAllowedToStepover(collision.assetName)) {
                 // use the ramp asset to have the skier jump whenever he hits a ramp.
                 if (this.checkIfSkierAllowedToJump(collision.assetName))
