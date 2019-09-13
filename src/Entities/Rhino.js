@@ -18,7 +18,7 @@ export class Rhino extends Entity {
         this.rhinoSkiTimer = this.skiTimer.createTimeout(
             ()=>{
                 this.canHunt = true;
-            },5000
+            },10000
         );
         document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, this.onGamePaused.bind(this));
 
