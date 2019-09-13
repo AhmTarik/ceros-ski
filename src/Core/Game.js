@@ -5,14 +5,17 @@ import { Skier } from "../Entities/Skier";
 import { Rhino } from "../Entities/Rhino";
 import { ObstacleManager } from "../Entities/Obstacles/ObstacleManager";
 import { Rect } from './Utils';
+import {Distance} from './Distance'
 
 export class Game {
     gameWindow = null;
 
 
     constructor() {
+
         this.gamePaused = false;
         this.rhinoCaughtTheSkier = false;
+        this.distance = new Distance();
         this.assetManager = new AssetManager();
         this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         this.skier = new Skier(0, 0);
@@ -46,8 +49,8 @@ export class Game {
 
     updateGameWindow() {
         this.skier.move();
-        const skierPosition = this.skier.getPosition();
-        this.rhino.move(skierPosition);
+        //const skierPosition = this.skier.getPosition();
+        this.rhino.move();
         const previousGameWindow = this.gameWindow;
         this.calculateGameWindow();
 
@@ -105,20 +108,18 @@ export class Game {
 
     onGameOverChange(e) {
         if (!e || !e.detail || !e.detail.gameOver == null) {
-            e.preventDefault();
             return;
         }
-        this.restart();
         e.preventDefault();
+        this.restart();
     }
 
     onRhinoCaughtTheSkier(e) {
         if (!e || !e.detail) {
-            e.preventDefault();
             return;
         }
-        this.rhinoCaughtTheSkier = true;
         e.preventDefault();
+        this.rhinoCaughtTheSkier = true;
     }
 
     handleKeyDown(event) {

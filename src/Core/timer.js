@@ -7,13 +7,13 @@ export class SkiTimer {
             skiTimeOut: _skiTimeOut,
             intervalTime: intervalTime,
             createdAt: new Date(),
-            callBack : cb
+            callBack: cb
         }
     }
 
     cancelTimeout(skiTimer) {
         if (!this.isValid(skiTimer))
-            console.log(`skiTimer object not valid ${skiTimer}`);
+            return;
         let _currentDate = new Date();
         let _diff_ms = _currentDate.getTime() - skiTimer.createdAt.getTime();
         skiTimer.intervalTime -= _diff_ms;
@@ -23,8 +23,8 @@ export class SkiTimer {
 
     resumeTimeout(skiTimer) {
         if (!this.isValid(skiTimer))
-            console.log(`skiTimer object not valid ${skiTimer}`);
-        skiTimer.skiTimeOut = setTimeout(skiTimer.callBack,skiTimer.intervalTime);
+            return;
+        skiTimer.skiTimeOut = setTimeout(skiTimer.callBack, skiTimer.intervalTime);
         skiTimer.createdAt = new Date();
     }
 

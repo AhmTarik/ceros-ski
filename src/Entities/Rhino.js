@@ -1,10 +1,11 @@
 import * as Constants from "../Constants";
 import { Entity } from "./Entity";
 import { SkiTimer } from "../Core/timer";
+import { EventEmitter } from "events"
 
 export class Rhino extends Entity {
-    
-    
+
+
     constructor(x, y) {
         super(x, y);
         this.skierPosition;
@@ -14,24 +15,19 @@ export class Rhino extends Entity {
         this.direction = Constants.RHINO_DIRECTOIN.LEFT;
         this.space = Constants.SPACE_BETWEEN_SKIER_AND_RHINO;
         this.speed = Constants.RHINO_STARTING_SPEED;
+        this.eventEmitter = new EventEmitter();
         this.skiTimer = new SkiTimer();
-        this.rhinoSkiTimer = this.skiTimer.createTimeout(
-            ()=>{
-                this.canHunt = true;
-            },10000
-        );
-        document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, this.onGamePaused.bind(this));
-
-        // setTimeout(
-        //     () => {
-        //         this.canHunt = true;
-        //         // console.log(`the skier position in timeout is ${JSON.stringify(this.skierPosition)}`);
-        //         //this.setPosition()
-        //     }
-        //     , 5000)
+        this.initEvents();
     }
 
-    setDirection(direction){
+    initEvents() {
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_SEND_POSITION, this.onSkierSendPosition.bind(this));
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, this.onGamePaused.bind(this));
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_MOVED, this.onSkierMoved.bind(this));
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_CUT_THE_DISTANCE, this.onSkierCutTheDistance.bind(this));
+    }
+
+    setDirection(direction) {
         if (Constants.RHINO_DIRECTION_ASSET[direction] != null && this.direction !== direction) {
             this.direction = direction;
             this.updateAsset();
@@ -39,7 +35,7 @@ export class Rhino extends Entity {
     }
 
     updateAsset() {
-            this.assetName = Constants.RHINO_DIRECTION_ASSET[this.direction]
+        this.assetName = Constants.RHINO_DIRECTION_ASSET[this.direction]
     }
 
     setSpace() {
@@ -62,6 +58,10 @@ export class Rhino extends Entity {
         this.catchIt = value;
     }
 
+    setCanHunt(value) {
+        this.canHunt = value;
+    }
+
     draw(canvas, assetManager) {
         if (!this.canHunt)
             return;
@@ -69,9 +69,7 @@ export class Rhino extends Entity {
     }
 
 
-    move(skierPosition) {
-        // start save skier position
-        this.setSkierPosition(skierPosition);
+    move() {
         // start move rhino to skier position
         this.setPosition();
         if (this.canHunt) {
@@ -79,27 +77,26 @@ export class Rhino extends Entity {
         }
 
         // change asset img for runing direction
-        if(!this.startEat){
+        if (!this.startEat) {
             this.setDirection(this.getRhinoRuningDirectionAsset());
         }
     }
 
     eat() {
-       // console.log('start eat the skier')
         // Start notify the skier to stop move
         this.notifySkierBeenCaught();
-        // start eat skier
         //start update eat asset's name every .25 sec
         let _moveCounter = Constants.RHINO_DIRECTOIN.LIFT;
         let eatAnimate = setInterval(() => {
-            if(_moveCounter == Constants.RHINO_DIRECTOIN.LIFT_EAT_4){
+            if (_moveCounter == Constants.RHINO_DIRECTOIN.LIFT_EAT_4) {
                 clearInterval(eatAnimate);
                 // notify game over
                 this.notifyGameOver();
             }
             this.setDirection(_moveCounter);
             _moveCounter++;
-        }, Constants.RHINO_EAT_SLIDER_TIME_INTERVAL)
+        }, Constants.RHINO_EAT_SLIDER_TIME_INTERVAL);
+
         this.startEat = true;
     }
 
@@ -112,8 +109,8 @@ export class Rhino extends Entity {
         }
     }
 
-    getRhinoRuningDirectionAsset(){
-       return  Math.random() < 0.5 ? Constants.RHINO_DIRECTOIN.LEFT : Constants.RHINO_DIRECTOIN.LEFT_2;
+    getRhinoRuningDirectionAsset() {
+        return Math.random() < 0.5 ? Constants.RHINO_DIRECTOIN.LEFT : Constants.RHINO_DIRECTOIN.LEFT_2;
     }
 
 
@@ -133,15 +130,44 @@ export class Rhino extends Entity {
 
     onGamePaused(e) {
         if (!e || !e.detail || e.detail.gamePaused == null) {
-            e.preventDefault();
             return;
         }
+        e.preventDefault();
         console.log(`inside rhino onGampaused ,gamePaused is ${e.detail.gamePaused}`)
-        if(e.detail.gamePaused)
+        if (e.detail.gamePaused)
             this.skiTimer.cancelTimeout(this.rhinoSkiTimer);
         else
             this.skiTimer.resumeTimeout(this.rhinoSkiTimer)
+    }
+
+    onSkierMoved(e) {
+        if (!e) {
+            return;
+        }
         e.preventDefault();
+        this.rhinoSkiTimer = this.skiTimer.createTimeout(
+            () => {
+                this.setCanHunt(true);
+            }, Constants.RHINO_COUNTDOWN_TIME_TO_START_HUNTING
+        );
+    }
+
+    onSkierCutTheDistance(e) {
+        if (!e) {
+            return;
+        }
+        e.preventDefault();
+        this.setCanHunt(true);
+        this.skiTimer.cancelTimeout(this.rhinoSkiTimer);
+    }
+
+    onSkierSendPosition(e) {
+        if (!e || !e.detail) {
+            return;
+        }
+        e.preventDefault();
+        // start save skier position
+        this.setSkierPosition(e.detail.position);
     }
 
 }

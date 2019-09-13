@@ -34,9 +34,11 @@ export const RHINO_STARTING_SPEED = 2;
 export const RHINO_DIAGONAL_SPEED_REDUCER = 1.7354;
 
 
-
+export const DISTANCE_SKIED_TO_START_RHINO = 7000;
 export const JUMPING_TIME = 1500;
 export const RHINO_EAT_SLIDER_TIME_INTERVAL = 250;
+export const RHINO_COUNTDOWN_TIME_TO_START_HUNTING = 10000;
+
 
 export const OBSTACLE_COLLISION_ASSET = {
   [TREE]: {
@@ -110,10 +112,18 @@ export const SKIER_DIRECTION_ASSET = {
 };
 
 export const SKI_EVENTS_ASSET = {
-  RHINO_CAUGHT_THE_SKIER: 'rhinoCaughtTheSkier',
   GAME_OVER: 'gameOver',
   GAME_STOPPED_RESUME: 'gemeStoppedResume',
-  SKIER_JUMP_STATUS: 'skierJumpStatus',
+  // SKIER_JUMP_STATUS: 'skierJumpStatus',
+
+  RHINO_CAN_CATCH: 'rhinoCanCatch',
+  RHINO_CAUGHT_THE_SKIER: 'rhinoCaughtTheSkier',
+
+  SKIER_SEND_POSITION : 'skierSendPosition',
+  SKIER_MOVED : 'skierMoved',
+  SKIER_CUT_THE_DISTANCE: 'skierCutTheDistance'
+
+
 }
 
 export const RHINO_DIRECTOIN = {

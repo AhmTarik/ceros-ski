@@ -5,10 +5,10 @@ import { SkiTimer } from "../Core/timer";
 
 
 export class Skier extends Entity {
-    assetName = Constants.SKIER_DOWN;
-    direction = Constants.SKIER_DIRECTIONS.DOWN;
+    assetName = Constants.SKIER_RIGHT;
+    direction = Constants.SKIER_DIRECTIONS.RIGHT;
     speed = Constants.SKIER_STARTING_SPEED;
-    
+
     constructor(x, y) {
         super(x, y);
         this.isJumping = false;
@@ -43,8 +43,8 @@ export class Skier extends Entity {
 
     updateTimeOut() {
         if (this.isJumping) {
-            this.jumpingTimeout = this.skiTimer.createTimeout(() => { this.setJumping(false) },Constants.JUMPING_TIME);
-           // setTimeout(() => { this.setJumping(false) }, Constants.JUMPING_TIME);
+            this.jumpingTimeout = this.skiTimer.createTimeout(() => { this.setJumping(false) }, Constants.JUMPING_TIME);
+            // setTimeout(() => { this.setJumping(false) }, Constants.JUMPING_TIME);
         } else {
             if (this.jumpingTimeout) {
                 this.skiTimer.cancelTimeout(this.jumpingTimeout)
@@ -59,7 +59,10 @@ export class Skier extends Entity {
         this.setJumping(true);
     }
 
+
+
     move() {
+        this.notifySkierPosition();
         switch (this.direction) {
             case Constants.SKIER_DIRECTIONS.LEFT_DOWN:
                 this.moveSkierLeftDown();
@@ -170,15 +173,6 @@ export class Skier extends Entity {
         return false;
     }
 
-    onSkierCaught(e) {
-        if (!e || !e.detail) {
-            e.preventDefault();
-            return;
-        }
-        this.setDirection(Constants.SKIER_DIRECTIONS.CAUGHT)
-        e.preventDefault();
-    }
-
     checkIfSkierHitObstacle(obstacleManager, assetManager) {
         const asset = assetManager.getAsset(this.assetName);
         const skierBounds = new Rect(
@@ -213,16 +207,32 @@ export class Skier extends Entity {
         }
     };
 
+    onSkierCaught(e) {
+        if (!e || !e.detail) {
+            return;
+        }
+        this.setDirection(Constants.SKIER_DIRECTIONS.CAUGHT)
+        e.preventDefault();
+    }
+
     onGamePaused(e) {
         if (!e || !e.detail || e.detail.gamePaused == null) {
-            e.preventDefault();
             return;
         }
         console.log(`inside rhino onGampaused ,gamePaused is ${e.detail.gamePaused}`)
-        if(e.detail.gamePaused)
+        if (e.detail.gamePaused)
             this.skiTimer.cancelTimeout(this.jumpingTimeout);
         else
             this.skiTimer.resumeTimeout(this.jumpingTimeout)
         e.preventDefault();
+    }
+
+    notifySkierPosition() {
+        let element = document;
+        let event = document.createEvent("CustomEvent");
+        event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_SEND_POSITION, true, true, {
+            position: this.getPosition()
+        });
+        element.dispatchEvent(event);
     }
 } 
