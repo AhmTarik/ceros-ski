@@ -1,5 +1,3 @@
-import * as Constants from "../Constants";
-
 export class Canvas {
     x = 0;
     y = 0;

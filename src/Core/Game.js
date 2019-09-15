@@ -23,11 +23,13 @@ export class Game {
         this.skier = new Skier(0, 0);
         this.rhino = new Rhino(0, 0);
         this.obstacleManager = new ObstacleManager();
+        this.initEvents();
+    }
 
+    initEvents(){
         document.addEventListener('keydown', this.handleKeyDown.bind(this));
         document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_OVER, this.onGameOverChange.bind(this));
         document.addEventListener(Constants.SKI_EVENTS_ASSET.RHINO_CAUGHT_THE_SKIER, this.onRhinoCaughtTheSkier.bind(this));
-
     }
 
     init() {

@@ -7,16 +7,20 @@ import { SkiTimer } from "../Core/timer";
 export class Skier extends Entity {
     assetName = Constants.SKIER_RIGHT;
     direction = Constants.SKIER_DIRECTIONS.RIGHT;
-    speed ;
+    speed;
 
     constructor(x, y) {
         super(x, y);
         this.isJumping = false;
         this.jumpingTimeout = {};
         this.skiTimer = new SkiTimer();
+        this.setSpeed(Constants.SKIER_STARTING_SPEED);
+        this.initEvents();
+    }
+
+    initEvents() {
         document.addEventListener(Constants.SKI_EVENTS_ASSET.RHINO_CAUGHT_THE_SKIER, this.onSkierCaught.bind(this));
         document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, this.onGamePaused.bind(this));
-        this.setSpeed(Constants.SKIER_STARTING_SPEED);
     }
 
     setDirection(direction) {
@@ -27,17 +31,17 @@ export class Skier extends Entity {
         }
     }
 
-    setSpeed(value){
+    setSpeed(value) {
         this.speed = value;
         this.notifyCurrentSpeed();
     }
 
-    increaseSpeed(speed=1){
+    increaseSpeed(speed = 1) {
         this.setSpeed(this.speed + speed)
     }
 
     updateAsset() {
-        this.assetName = (this.isJumping) ?
+        this.assetName = (this.isJumping && this.direction != Constants.SKIER_DIRECTIONS.CRASH) ?
             Constants.SKIER_DIRECTION_ASSET[Constants.SKIER_DIRECTIONS.JUMP]
             : Constants.SKIER_DIRECTION_ASSET[this.direction];
     }
@@ -53,13 +57,8 @@ export class Skier extends Entity {
     updateTimeOut() {
         if (this.isJumping) {
             this.jumpingTimeout = this.skiTimer.createTimeout(() => { this.setJumping(false) }, Constants.JUMPING_TIME);
-            // setTimeout(() => { this.setJumping(false) }, Constants.JUMPING_TIME);
-        } else {
-            if (this.jumpingTimeout) {
-                this.skiTimer.cancelTimeout(this.jumpingTimeout)
-                // clearTimeout(this.jumpingTimeout);
-                // this.jumpingTimeout = null;
-            }
+        } else if (this.jumpingTimeout) {
+            this.skiTimer.cancelTimeout(this.jumpingTimeout)
         }
     }
 
@@ -220,20 +219,20 @@ export class Skier extends Entity {
         if (!e || !e.detail) {
             return;
         }
-        this.setDirection(Constants.SKIER_DIRECTIONS.CAUGHT)
         e.preventDefault();
+        this.setDirection(Constants.SKIER_DIRECTIONS.CAUGHT)
     }
 
     onGamePaused(e) {
         if (!e || !e.detail || e.detail.gamePaused == null) {
             return;
         }
-        console.log(`inside rhino onGampaused ,gamePaused is ${e.detail.gamePaused}`)
+        e.preventDefault();
+
         if (e.detail.gamePaused)
             this.skiTimer.cancelTimeout(this.jumpingTimeout);
         else
             this.skiTimer.resumeTimeout(this.jumpingTimeout)
-        e.preventDefault();
     }
 
     notifySkierPosition() {
@@ -245,18 +244,12 @@ export class Skier extends Entity {
         element.dispatchEvent(event);
     }
 
-    notifyCurrentSpeed(){
-        try{
-            let element = document;
-            let event = document.createEvent("CustomEvent");
-            event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_CURRENT_SPEED, true, true, {
-                speed: this.speed
-            });
-            element.dispatchEvent(event);
-        }catch(ex){
-            debugger;
-            console.log(ex)
-        }
-       
+    notifyCurrentSpeed() {
+        let element = document;
+        let event = document.createEvent("CustomEvent");
+        event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_CURRENT_SPEED, true, true, {
+            speed: this.speed
+        });
+        element.dispatchEvent(event);
     }
 } 

@@ -9,17 +9,16 @@ export class Distance {
         this.skierMoved = false;
         this.cutDistanceTriggered = false;
         this.eventEmitter = new EventEmitter();
-        
         this.initEvents();
+    }
+    
+    initEvents() {
         // listen on skier postition
         document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_SEND_POSITION, this.onSkierSendPosition.bind(this));
-    }
-
-    initEvents() {
         this.eventEmitter.on('settingSkierPosition', this.setSkierPosition.bind(this));
         this.eventEmitter.on('skierPositionWasSet', this.setDistanceCovered.bind(this));
         this.eventEmitter.on('distanceCoveredValueWasSet', this.checkSkierIsMoved.bind(this));
-        this.eventEmitter.on('distanceCoveredValueWasSet', this.notifySkierCutDistanceCovered.bind(this));
+        this.eventEmitter.on('distanceCoveredValueWasSet', this.notifySkierDistanceCovered.bind(this));
     }
 
     onSkierSendPosition(e) {
@@ -68,7 +67,7 @@ export class Distance {
         element.dispatchEvent(event);
     }
 
-    notifySkierCutDistanceCovered() {
+    notifySkierDistanceCovered() {
         let element = document;
         let event = document.createEvent("CustomEvent");
         event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_DISTANCE_COVERED, true, true, {
