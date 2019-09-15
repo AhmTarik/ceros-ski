@@ -34,10 +34,10 @@ export const RHINO_STARTING_SPEED = 2;
 export const RHINO_DIAGONAL_SPEED_REDUCER = 1.7354;
 
 
-export const DISTANCE_SKIED_TO_START_RHINO = 7000;
+export const DISTANCE_SKIED_TO_START_RHINO = 8000;
 export const JUMPING_TIME = 1500;
 export const RHINO_EAT_SLIDER_TIME_INTERVAL = 250;
-export const RHINO_COUNTDOWN_TIME_TO_START_HUNTING = 10000;
+export const RHINO_COUNTDOWN_TIME_TO_START_HUNTING = 16000;
 
 
 export const OBSTACLE_COLLISION_ASSET = {
@@ -121,8 +121,8 @@ export const SKI_EVENTS_ASSET = {
 
   SKIER_SEND_POSITION : 'skierSendPosition',
   SKIER_MOVED : 'skierMoved',
-  SKIER_CUT_THE_DISTANCE: 'skierCutTheDistance'
-
+  SKIER_DISTANCE_COVERED : 'skierDistanceCovered',
+  SKIER_CURRENT_SPEED : 'skierCurrentSpeed'
 
 }
 
@@ -159,5 +159,6 @@ export const KEYS = {
   DOWN: 40,
   JUMP: 32, //space
   PAUSE: 80, // p 
+  FAST: 70. //f
 
 };

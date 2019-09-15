@@ -5,7 +5,8 @@ import { Skier } from "../Entities/Skier";
 import { Rhino } from "../Entities/Rhino";
 import { ObstacleManager } from "../Entities/Obstacles/ObstacleManager";
 import { Rect } from './Utils';
-import {Distance} from './Distance'
+import { Distance } from './Distance'
+import { Dashboard } from "./dashboard";
 
 export class Game {
     gameWindow = null;
@@ -16,6 +17,7 @@ export class Game {
         this.gamePaused = false;
         this.rhinoCaughtTheSkier = false;
         this.distance = new Distance();
+        this.dashboard = new Dashboard();
         this.assetManager = new AssetManager();
         this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         this.skier = new Skier(0, 0);
@@ -151,6 +153,10 @@ export class Game {
                 break;
             case Constants.KEYS.PAUSE:
                 this.pauseGame();
+                event.preventDefault();
+                break;
+            case Constants.KEYS.FAST:
+                this.skier.increaseSpeed(1);
                 event.preventDefault();
                 break;
         }

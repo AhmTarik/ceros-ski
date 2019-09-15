@@ -2,3 +2,13 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
+[speed] span{
+    color: green;
+    font-size: 20px;
+}
+
+[scores] span{
+    color: blue;
+    font-size: 20px
+}

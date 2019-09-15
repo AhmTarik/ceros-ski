@@ -7,7 +7,7 @@ import { SkiTimer } from "../Core/timer";
 export class Skier extends Entity {
     assetName = Constants.SKIER_RIGHT;
     direction = Constants.SKIER_DIRECTIONS.RIGHT;
-    speed = Constants.SKIER_STARTING_SPEED;
+    speed ;
 
     constructor(x, y) {
         super(x, y);
@@ -16,7 +16,7 @@ export class Skier extends Entity {
         this.skiTimer = new SkiTimer();
         document.addEventListener(Constants.SKI_EVENTS_ASSET.RHINO_CAUGHT_THE_SKIER, this.onSkierCaught.bind(this));
         document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, this.onGamePaused.bind(this));
-
+        this.setSpeed(Constants.SKIER_STARTING_SPEED);
     }
 
     setDirection(direction) {
@@ -25,6 +25,15 @@ export class Skier extends Entity {
             this.direction = direction;
             this.updateAsset();
         }
+    }
+
+    setSpeed(value){
+        this.speed = value;
+        this.notifyCurrentSpeed();
+    }
+
+    increaseSpeed(speed=1){
+        this.setSpeed(this.speed + speed)
     }
 
     updateAsset() {
@@ -234,5 +243,20 @@ export class Skier extends Entity {
             position: this.getPosition()
         });
         element.dispatchEvent(event);
+    }
+
+    notifyCurrentSpeed(){
+        try{
+            let element = document;
+            let event = document.createEvent("CustomEvent");
+            event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_CURRENT_SPEED, true, true, {
+                speed: this.speed
+            });
+            element.dispatchEvent(event);
+        }catch(ex){
+            debugger;
+            console.log(ex)
+        }
+       
     }
 } 

@@ -19,7 +19,7 @@ export class Distance {
         this.eventEmitter.on('settingSkierPosition', this.setSkierPosition.bind(this));
         this.eventEmitter.on('skierPositionWasSet', this.setDistanceCovered.bind(this));
         this.eventEmitter.on('distanceCoveredValueWasSet', this.checkSkierIsMoved.bind(this));
-        this.eventEmitter.on('distanceCoveredValueWasSet', this.checkSkierIfCutTheDistance.bind(this));
+        this.eventEmitter.on('distanceCoveredValueWasSet', this.notifySkierCutDistanceCovered.bind(this));
     }
 
     onSkierSendPosition(e) {
@@ -43,8 +43,11 @@ export class Distance {
     }
 
     setDistanceCovered(oldPoistion, newPosition) {
-        this.distanceCovered += this.calcDistance(oldPoistion, newPosition);
-        this.eventEmitter.emit('distanceCoveredValueWasSet');
+        let _distanceCovered = this.calcDistance(oldPoistion, newPosition);
+        if(_distanceCovered > 0){
+            this.distanceCovered += this.calcDistance(oldPoistion, newPosition);
+            this.eventEmitter.emit('distanceCoveredValueWasSet');
+        }
     }
 
     checkSkierIsMoved() {
@@ -56,13 +59,7 @@ export class Distance {
         }
     }
 
-    checkSkierIfCutTheDistance() {
-        if(this.distanceCovered >= Constants.DISTANCE_SKIED_TO_START_RHINO &&
-            !this.cutDistanceTriggered){
-            this.notifySkierCutDistance();
-            this.cutDistanceTriggered = true;
-        }
-    }
+   
 
     notifySkierMoved() {
         let element = document;
@@ -71,11 +68,11 @@ export class Distance {
         element.dispatchEvent(event);
     }
 
-    notifySkierCutDistance() {
+    notifySkierCutDistanceCovered() {
         let element = document;
         let event = document.createEvent("CustomEvent");
-        event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_CUT_THE_DISTANCE, true, true, {
-            distanceCovered: this.distanceCovered,
+        event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_DISTANCE_COVERED, true, true, {
+            distanceCovered: Number(this.distanceCovered).toFixed(0),
         });
         element.dispatchEvent(event);
     }

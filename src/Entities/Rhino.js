@@ -24,7 +24,7 @@ export class Rhino extends Entity {
         document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_SEND_POSITION, this.onSkierSendPosition.bind(this));
         document.addEventListener(Constants.SKI_EVENTS_ASSET.GAME_STOPPED_RESUME, this.onGamePaused.bind(this));
         document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_MOVED, this.onSkierMoved.bind(this));
-        document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_CUT_THE_DISTANCE, this.onSkierCutTheDistance.bind(this));
+        document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_DISTANCE_COVERED, this.onSkierDistanceCovered.bind(this));
     }
 
     setDirection(direction) {
@@ -109,6 +109,10 @@ export class Rhino extends Entity {
         }
     }
 
+    checkSkierIfCutTheDistance(distanceCovered) {
+        return distanceCovered >= Constants.DISTANCE_SKIED_TO_START_RHINO;
+    }
+
     getRhinoRuningDirectionAsset() {
         return Math.random() < 0.5 ? Constants.RHINO_DIRECTOIN.LEFT : Constants.RHINO_DIRECTOIN.LEFT_2;
     }
@@ -133,7 +137,6 @@ export class Rhino extends Entity {
             return;
         }
         e.preventDefault();
-        console.log(`inside rhino onGampaused ,gamePaused is ${e.detail.gamePaused}`)
         if (e.detail.gamePaused)
             this.skiTimer.cancelTimeout(this.rhinoSkiTimer);
         else
@@ -152,13 +155,16 @@ export class Rhino extends Entity {
         );
     }
 
-    onSkierCutTheDistance(e) {
+    onSkierDistanceCovered(e) {
         if (!e) {
             return;
         }
         e.preventDefault();
-        this.setCanHunt(true);
-        this.skiTimer.cancelTimeout(this.rhinoSkiTimer);
+       
+        if(this.checkSkierIfCutTheDistance(e.detail.distanceCovered) && !this.canHunt){
+            this.setCanHunt(true);
+            this.skiTimer.cancelTimeout(this.rhinoSkiTimer);
+        }
     }
 
     onSkierSendPosition(e) {
