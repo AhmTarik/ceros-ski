@@ -91,3 +91,11 @@ how creative candidates get with this.
 * Write more unit tests for your code
 
 We are looking forward to see what you come up with!
+
+
+* **Ski challenge Url:**
+My play version  is : http://ceros-ski-a.tarik.s3-website-us-east-1.amazonaws.com/
+
+* **Comments:**
+1- check incoming direction inside onSetDirection function already existed in Skier direction assets  in, bransh "fixbug-left-arrow-white-screen"
+2- Add unit test cases for testing the bug and make sure it will not happen again

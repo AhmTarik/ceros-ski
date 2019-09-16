@@ -10,8 +10,9 @@ describe(`Skier direction valid if`, () => {
       });
       
     it(`disallow set not valid direction`, () => {
+        let currentDirection = _skier.direction;
         _skier.setDirection(-576767676);
-        expect(_skier.direction).toBe(Constants.SKIER_DIRECTIONS.DOWN);
+        expect(_skier.direction).toBe(currentDirection);
     });
 
     it(`allow skier gets up after crashed when turn left <--`, () => {
@@ -41,7 +42,5 @@ describe(`Skier direction valid if`, () => {
         _skier = new Skier(0,0);
     }
 
-    function crashSkier(){
-        
-    }
+
 });
