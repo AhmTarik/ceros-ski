@@ -114,16 +114,12 @@ export const SKIER_DIRECTION_ASSET = {
 export const SKI_EVENTS_ASSET = {
   GAME_OVER: 'gameOver',
   GAME_STOPPED_RESUME: 'gemeStoppedResume',
-  // SKIER_JUMP_STATUS: 'skierJumpStatus',
-
   RHINO_CAN_CATCH: 'rhinoCanCatch',
   RHINO_CAUGHT_THE_SKIER: 'rhinoCaughtTheSkier',
-
   SKIER_SEND_POSITION : 'skierSendPosition',
   SKIER_MOVED : 'skierMoved',
   SKIER_DISTANCE_COVERED : 'skierDistanceCovered',
   SKIER_CURRENT_SPEED : 'skierCurrentSpeed'
-
 }
 
 export const RHINO_DIRECTOIN = {

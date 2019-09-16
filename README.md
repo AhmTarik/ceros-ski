@@ -96,6 +96,75 @@ We are looking forward to see what you come up with!
 * **Ski challenge Url:**
 My play version  is : http://ceros-ski-a.tarik.s3-website-us-east-1.amazonaws.com/
 
+* **Checklist:**
+:white_check_mark: fixing the bug
+:white_check_mark: skier can jump by key
+:white_check_mark: skier can jump by ramp
+:white_check_mark: skier can jump over rock
+:white_check_mark: skier can't jump over tree
+:white_check_mark: rhino show after skier ski for too long
+:white_check_mark: rhino show after certain time 
+:white_check_mark: rhino catch the skier
+:white_check_mark: rhino eat the skier
+:white_check_mark: reset game once it's over
+:white_check_mark: pause and resume the game
+:white_check_mark: add dashboard sor score,speed and game status
+:white_check_mark: increase skier speed
+:x: ncrease obstacle frequency
+:white_check_mark: Deploy game on s3 
+
+
+
+
+
+
+
+
+
+
 * **Comments:**
-1- check incoming direction inside onSetDirection function already existed in Skier direction assets  in, bransh "fixbug-left-arrow-white-screen"
+1- Create "fixbug-left-arrow-white-screen" branch, then check incoming direction inside onSetDirection function already existed in Skier direction assets.
 2- Add unit test cases for testing the bug and make sure it will not happen again
+3- Create "allow-jumping" branch add space-bar  as a new key in controls object and linked handle click of space inside skier class.
+4- Start draw juming ramp by added in assets object in "Constants.js" file and added as new asset type in "Obstacle.js" file.
+5-  Add isJumping prop by: 
+    a- Start add some assets for jumping feature like (name,image url and jumping time).
+    b- Add "isJumping" property inside skier class.
+    c- Allow skier to finished jump by using timeout fn.  
+6- Change Skier Condition only if direction equal to down, left-down or right down.
+7- Update Skier asset name when any change happen to "isJumping" value.
+8- Start allow skier to jump over obstacles
+   a- Create OBSTACLE_COLLISION_ASSET in "Constants.js", that contain all obstacles in ski-game with defined if it allow skier to stepover or can jump.
+   b- inside checkIfSkierHitObstacle() function on "Skier.js" add extra conditions if collision happen like  make skier jump over obstcale  or can help skier to jump.
+9- Create "rhino-beast" branch.
+   a- create "Rhino.js" class that extend entity class.
+   b- define some new assets for rhino to allow draw it in "Constants.js" file.
+   c- create timeout in rhino constructor to allow it to catch the skier by set "cancatch" to true.
+   d- try to animate rhino movement inside move() fn, By make space between it and the skier and  canCatch flag is active
+      then decrease the space every time  when draw it to reach zero(skier and rhino in same location).
+   e- allow draw rhino if only canCatch flag is active
+10- Add pause/resume feature by using events
+   a- trigger event when game pause or resume to help other objects later.
+   b- stop game inside in run() fn "Gamer.js"
+11- From point 10 and later start send/recieve date between classes using events easy on( modification,reading code and scalability)
+12- Start animate rhino eat the skier
+   a- create some assets
+   b- create timeintervalto change rhino direction every 250mSec
+   c- notify "game is over" event
+   d- skier stopped  on listening to event "game is over" 
+   e- game restart on  game class listening to event "game is over"
+13- Idle any timeout when game paused
+   a- create "Timer.js" class with 3 methods (create,cancel and resume) timeout.
+   b- link skier and rhino with this class 
+   c- example like skier jumping for 1.5Sec, rhino countdown timer to start catch the skier
+14- Add bounus features
+   a- create Distance class to be responsible for check skier moved and distance covered and trigger event if value changed.
+   b- create Dashboard class to be responsible for displaying game status,score and skier speed when any change happen.
+   c- in skier class notify about the position.
+   d- in rhino start catch the skier if countdown timer start when skier moved or skier cut defined distance covered.
+      by listen to "SkierMoved" and "SKIER_DISTANCE_COVERED".
+   e- add increase speed feature for skier and when speed increase trigger event "SKIER_CURRENT_SPEED".
+
+
+  
+
