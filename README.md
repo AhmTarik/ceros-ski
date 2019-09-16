@@ -127,10 +127,10 @@ My play version  is : http://ceros-ski-a.tarik.s3-website-us-east-1.amazonaws.co
 * 2- Add unit test cases for testing the bug and make sure it will not happen again
 * 3- Create "allow-jumping" branch add space-bar  as a new key in controls object and linked handle click of space inside skier class.
 * 4- Start draw juming ramp by added in assets object in "Constants.js" file and added as new asset type in "Obstacle.js" file.
-* 5- Add isJumping prop by: 
-      a- Start add some assets for jumping feature like (name,image url and jumping time).
-      b- Add "isJumping" property inside skier class.
-      c- Allow skier to finished jump by using timeout fn.  
+Markup : * 5- Add isJumping prop by: 
+      * a- Start add some assets for jumping feature like (name,image url and jumping time).
+      * b- Add "isJumping" property inside skier class.
+      * c- Allow skier to finished jump by using timeout fn.  
 * 6- Change Skier Condition only if direction equal to down, left-down or right down.
 * 7- Update Skier asset name when any change happen to "isJumping" value.
 * 8- Start allow skier to jump over obstacles
