@@ -97,21 +97,21 @@ We are looking forward to see what you come up with!
 My play version  is : http://ceros-ski-a.tarik.s3-website-us-east-1.amazonaws.com/
 
 * **Checklist:**
-:white_check_mark: fixing the bug
-:white_check_mark: skier can jump by key
-:white_check_mark: skier can jump by ramp
-:white_check_mark: skier can jump over rock
-:white_check_mark: skier can't jump over tree
-:white_check_mark: rhino show after skier ski for too long
-:white_check_mark: rhino show after certain time 
-:white_check_mark: rhino catch the skier
-:white_check_mark: rhino eat the skier
-:white_check_mark: reset game once it's over
-:white_check_mark: pause and resume the game
-:white_check_mark: add dashboard sor score,speed and game status
-:white_check_mark: increase skier speed
-:x: ncrease obstacle frequency
-:white_check_mark: Deploy game on s3 
+* :white_check_mark: fixing the bug
+* :white_check_mark: skier can jump by key
+* :white_check_mark: skier can jump by ramp
+* :white_check_mark: skier can jump over rock
+* :white_check_mark: skier can't jump over tree
+* :white_check_mark: rhino show after skier ski for too long
+* :white_check_mark: rhino show after certain time 
+* :white_check_mark: rhino catch the skier
+* :white_check_mark: rhino eat the skier
+* :white_check_mark: reset game once it's over
+* :white_check_mark: pause and resume the game
+* :white_check_mark: add dashboard sor score,speed and game status
+* :white_check_mark: increase skier speed
+* :x: ncrease obstacle frequency
+* :white_check_mark: Deploy game on s3 
 
 
 
