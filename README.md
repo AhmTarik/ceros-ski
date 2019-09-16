@@ -94,7 +94,7 @@ We are looking forward to see what you come up with!
 
 
 * **Ski challenge Url:**
-My play version  is : http://ceros-ski-a.tarik.s3-website-us-east-1.amazonaws.com/
+My game version : http://ceros-ski-a.tarik.s3-website-us-east-1.amazonaws.com/
 
 * **Checklist:**
 * :white_check_mark: fixing the bug
