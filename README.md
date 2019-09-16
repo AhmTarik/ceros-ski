@@ -110,7 +110,7 @@ My play version  is : http://ceros-ski-a.tarik.s3-website-us-east-1.amazonaws.co
 * :white_check_mark: pause and resume the game
 * :white_check_mark: add dashboard sor score,speed and game status
 * :white_check_mark: increase skier speed
-* :x: ncrease obstacle frequency
+* :x: increase obstacle frequency
 * :white_check_mark: Deploy game on s3 
 
 
