@@ -47,6 +47,9 @@ export class Canvas {
         elem.style.width = this.dashboardWidth + 'px';
         elem.style.height = this.height
         elem.style.float = 'right';
+        elem.style.position = 'fixed';
+        elem.style.right = 0;
+        elem.style.top = 0;
         elem.innerHTML = `
             <div status ><br />Status : <span>Playing</span></div>
             <div scores ><br />Scores : <span>0</span></div>
