@@ -41,10 +41,11 @@ export class Skier extends Entity {
     }
 
     updateAsset() {
-        this.assetName = (this.isJumping && this.direction != Constants.SKIER_DIRECTIONS.CRASH) ?
-            Constants.SKIER_DIRECTION_ASSET[Constants.SKIER_DIRECTIONS.JUMP]
-            : Constants.SKIER_DIRECTION_ASSET[this.direction];
-    }
+        if (this.isJumping && this.direction != Constants.SKIER_DIRECTIONS.CRASH)
+            this.assetName = Constants.SKIER_DIRECTION_ASSET[Constants.SKIER_DIRECTIONS.JUMP];
+        else
+            this.assetName = Constants.SKIER_DIRECTION_ASSET[this.direction]
+     }
 
     setJumping(value) {
         if (this.isJumping !== value) {
@@ -152,13 +153,12 @@ export class Skier extends Entity {
     }
 
     getObstacleCollisionAsset(obstacleName) {
-        return Constants.OBSTACLE_COLLISION_ASSET[obstacleName] != null
-            ? Constants.OBSTACLE_COLLISION_ASSET[obstacleName] : null;
+        return Constants.OBSTACLE_COLLISION_ASSET[obstacleName];
     }
 
     checkIfSkierAllowedToStepover(name) {
         let _obstacleAsset = this.getObstacleCollisionAsset(name);
-        // based on obstacle type and jumping status
+        // allow to jump based on obstacle type and jumping status
         if (_obstacleAsset && _obstacleAsset.stepover) {
             return _obstacleAsset.stepover && (this.checkIfSkierAllowedToJump(name) || this.isJumping);
         }
@@ -205,13 +205,12 @@ export class Skier extends Entity {
         if (collision) {
             if (this.checkIfSkierAllowedToStepover(collision.assetName)) {
                 // use the ramp asset to have the skier jump whenever he hits a ramp.
-                if (this.checkIfSkierAllowedToJump(collision.assetName))
+                if (this.checkIfSkierAllowedToJump(collision.assetName)) {
                     this.resetJumping();
-                // if not that case will use
-                // this.setJumping(true)
-            }
-            else
+                }
+            } else {
                 this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
+            }
         }
     };
 

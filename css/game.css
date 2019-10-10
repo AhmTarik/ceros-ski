@@ -12,3 +12,9 @@ html, body {
     color: blue;
     font-size: 20px
 }
+
+#dashboard {
+    position: fixed;
+    right: 0px;
+    top: 0px;
+}

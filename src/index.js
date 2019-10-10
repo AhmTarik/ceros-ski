@@ -5,13 +5,11 @@ document.addEventListener("DOMContentLoaded",() => {
 
     const skiGame = new Game();
     skiGame.load().then(() => {
-        //console.log('run ...')
         skiGame.init();
         skiGame.run();
     })
     .catch(e =>{
         console.log(`Index error is : `,e)
-        //debugger;
         window.location.reload();
     });
 });

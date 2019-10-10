@@ -1,24 +1,14 @@
 
 import * as Constants from "../Constants";
-import { EventEmitter } from "events"
 export class Distance {
 
     constructor() {
         this.distanceCovered = 0;
-        this.skierPosition = {x:0,y:0};
+        this.skierPosition = { x: 0, y: 0 };
         this.skierMoved = false;
         this.cutDistanceTriggered = false;
-        this.eventEmitter = new EventEmitter();
-        this.initEvents();
-    }
-    
-    initEvents() {
         // listen on skier postition
         document.addEventListener(Constants.SKI_EVENTS_ASSET.SKIER_SEND_POSITION, this.onSkierSendPosition.bind(this));
-        this.eventEmitter.on('settingSkierPosition', this.setSkierPosition.bind(this));
-        this.eventEmitter.on('skierPositionWasSet', this.setDistanceCovered.bind(this));
-        this.eventEmitter.on('distanceCoveredValueWasSet', this.checkSkierIsMoved.bind(this));
-        this.eventEmitter.on('distanceCoveredValueWasSet', this.notifySkierDistanceCovered.bind(this));
     }
 
     onSkierSendPosition(e) {
@@ -26,13 +16,13 @@ export class Distance {
             return;
         }
         e.preventDefault();
-        this.eventEmitter.emit('settingSkierPosition', e.detail.position);
+        this.setSkierPosition(e.detail.position);
     }
 
     setSkierPosition(postition) {
         let oldPoistion = this.skierPosition;
         this.skierPosition = postition;
-        this.eventEmitter.emit('skierPositionWasSet', oldPoistion,postition);
+        this.setDistanceCovered(oldPoistion, postition);
     }
 
     calcDistance(oldPosition, newPosition) {
@@ -43,9 +33,10 @@ export class Distance {
 
     setDistanceCovered(oldPoistion, newPosition) {
         let _distanceCovered = this.calcDistance(oldPoistion, newPosition);
-        if(_distanceCovered > 0){
+        if (_distanceCovered > 0) {
             this.distanceCovered += this.calcDistance(oldPoistion, newPosition);
-            this.eventEmitter.emit('distanceCoveredValueWasSet');
+            this.checkSkierIsMoved();
+            this.notifySkierDistanceCovered()
         }
     }
 
@@ -58,12 +49,10 @@ export class Distance {
         }
     }
 
-   
-
     notifySkierMoved() {
         let element = document;
         let event = document.createEvent("CustomEvent");
-        event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_MOVED, true, true, {moveAt:new Date()});
+        event.initCustomEvent(Constants.SKI_EVENTS_ASSET.SKIER_MOVED, true, true, { moveAt: new Date() });
         element.dispatchEvent(event);
     }
 
