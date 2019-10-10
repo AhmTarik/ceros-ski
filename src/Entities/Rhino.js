@@ -1,7 +1,6 @@
 import * as Constants from "../Constants";
 import { Entity } from "./Entity";
 import { SkiTimer } from "../Core/timer";
-import { EventEmitter } from "events"
 
 export class Rhino extends Entity {
 
@@ -15,7 +14,6 @@ export class Rhino extends Entity {
         this.direction = Constants.RHINO_DIRECTOIN.LEFT;
         this.space = Constants.SPACE_BETWEEN_SKIER_AND_RHINO;
         this.speed = Constants.RHINO_STARTING_SPEED;
-        this.eventEmitter = new EventEmitter();
         this.skiTimer = new SkiTimer();
         this.initEvents();
     }
