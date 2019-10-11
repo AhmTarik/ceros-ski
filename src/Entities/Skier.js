@@ -48,11 +48,9 @@ export class Skier extends Entity {
      }
 
     setJumping(value) {
-        if (this.isJumping !== value) {
             this.isJumping = value;
             this.updateTimeOut();
             this.updateAsset();
-        }
     }
 
     updateTimeOut() {
@@ -64,7 +62,7 @@ export class Skier extends Entity {
     }
 
     resetJumping() {
-        this.setJumping(false);
+        this.skiTimer.cancelTimeout(this.jumpingTimeout);
         this.setJumping(true);
     }
 
