@@ -142,4 +142,3 @@ describe(`Skier Jumping feature valid if`, () => {
 
 
 });
-

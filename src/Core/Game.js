@@ -51,7 +51,6 @@ export class Game {
 
     updateGameWindow() {
         this.skier.move();
-        //const skierPosition = this.skier.getPosition();
         this.rhino.move();
         const previousGameWindow = this.gameWindow;
         this.calculateGameWindow();
