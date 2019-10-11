@@ -1,6 +1,6 @@
 import "babel-polyfill";
-import { Skier } from "../Entities/Skier";
-import * as Constants from "../Constants";
+import { Skier } from "../../Entities/Skier";
+import * as Constants from "../../Constants";
 
 
 describe(`Skier direction valid if`, () => {
