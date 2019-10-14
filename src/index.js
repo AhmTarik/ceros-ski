@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded",() => {
         skiGame.run();
     })
     .catch(e =>{
-        console.log(`Index error is : `,e)
         window.location.reload();
     });
 });
