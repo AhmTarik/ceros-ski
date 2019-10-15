@@ -27,7 +27,8 @@ export class Canvas {
         canvas.style.height = this.height + 'px';
 
         this.ctx = canvas.getContext("2d");
-        this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        if (this.ctx)
+            this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
         document.body.appendChild(canvas);
         this.drawDashboard();

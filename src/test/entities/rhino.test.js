@@ -2,8 +2,6 @@ import "babel-polyfill";
 import { Skier } from "../../Entities/Skier";
 import { Rhino } from "../../Entities/Rhino";
 import { Distance } from '../../Core/Distance';
-
-
 import * as Constants from "../../Constants";
 
 

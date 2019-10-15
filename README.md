@@ -112,6 +112,7 @@ My game version : http://ceros-ski-a.tarik.s3-website-us-east-1.amazonaws.com/
 * :white_check_mark: increase skier speed
 * :x: increase obstacle frequency
 * :white_check_mark: Deploy game on s3 
+* :white_check_mark: Write more unit tests 
 
 
 * **Comments:**
